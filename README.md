@@ -2,8 +2,8 @@
 # Let Laravel Sanctum use cache to retrieve token
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/abe/cache-for-laravel-sanctum.svg?style=flat-square)](https://packagist.org/packages/abe/cache-for-laravel-sanctum)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/abe/cache-for-laravel-sanctum/run-tests?label=tests)](https://github.com/abe/cache-for-laravel-sanctum/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/abe/cache-for-laravel-sanctum/Check%20&%20fix%20styling?label=code%20style)](https://github.com/abe/cache-for-laravel-sanctum/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![run-tests](https://github.com/abrahamgreyson/cache-for-laravel-sanctum/actions/workflows/run-tests.yml/badge.svg)](https://github.com/abrahamgreyson/cache-for-laravel-sanctum/actions/workflows/run-tests.yml)
+[![Check & fix styling](https://github.com/abrahamgreyson/cache-for-laravel-sanctum/actions/workflows/php-cs-fixer.yml/badge.svg?branch=main)](https://github.com/abrahamgreyson/cache-for-laravel-sanctum/actions/workflows/php-cs-fixer.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/abe/cache-for-laravel-sanctum.svg?style=flat-square)](https://packagist.org/packages/abe/cache-for-laravel-sanctum)
 
 Laravel Sanctum brings 3 database queries every HTTP request.
