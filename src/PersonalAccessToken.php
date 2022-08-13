@@ -56,7 +56,7 @@ class PersonalAccessToken extends Sanctum
     public function tokenable(): Attribute
     {
         return Attribute::make(
-            get: fn($value, $attributes) => Cache::remember(
+            get: fn ($value, $attributes) => Cache::remember(
                 "personal-access-token:{$attributes['id']}:tokenable",
                 config('sanctum.cache.ttl') ?? self::$ttl,
                 function () {
@@ -77,6 +77,7 @@ class PersonalAccessToken extends Sanctum
 
         static::updating(function (self $personalAccessToken) {
             $interval = config('sanctum.cache.update_last_used_at_interval') ?? self::$interval;
+
             try {
                 Cache::remember(
                     "personal-access-token:{$personalAccessToken->id}:last_used_at",
@@ -85,14 +86,15 @@ class PersonalAccessToken extends Sanctum
                         DB::table($personalAccessToken->getTable())
                             ->where('id', $personalAccessToken->id)
                             ->update($personalAccessToken->getDirty());
+
                         return now();
                     }
                 );
             } catch (\Exception $e) {
                 Log::critical($e->getMessage());
             }
+
             return false;
         });
     }
-
 }
