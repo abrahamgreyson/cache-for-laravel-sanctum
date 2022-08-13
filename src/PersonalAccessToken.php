@@ -69,6 +69,8 @@ class PersonalAccessToken extends Sanctum
     /**
      * Bootstrap the model and its traits.
      *
+     * todo update cache
+     *
      * @return void
      */
     public static function boot(): void

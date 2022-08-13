@@ -6,9 +6,8 @@
 [![Check & fix styling](https://github.com/abrahamgreyson/cache-for-laravel-sanctum/actions/workflows/php-cs-fixer.yml/badge.svg?branch=main)](https://github.com/abrahamgreyson/cache-for-laravel-sanctum/actions/workflows/php-cs-fixer.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/abe/cache-for-laravel-sanctum.svg?style=flat-square)](https://packagist.org/packages/abe/cache-for-laravel-sanctum)
 
-Laravel Sanctum brings 3 database queries every HTTP request.
-This package wrap the default `PersonalAccessToken` model, use cache to retrieve the `token` and `tokenable`, added update interval for last used time(update only if current time greater than interval since last update, default to 1 hour).
-
+Laravel Sanctum brings 3 database queries for every HTTP request.
+The package wrap the default `PersonalAccessToken` model, uses cache to retrieve the `personal_access_token` and `tokenable` model, and adds a time interval for the `last_used_at` update, the model will be updated only if the time interval is exceeded since the last update.  This will reduce 2 or 3 database queries for most requests.
 
 ## Installation
 
@@ -20,7 +19,9 @@ composer require abe/cache-for-laravel-sanctum
 
 ## Usage
 
-Once you require this package in project, Sanctum token will retrieve through cache automatically.
+Once you require this package in project, Sanctum token will retrieve through cache automatically, Redis cache is recommended.
+
+```php
 
 ## Testing
 
