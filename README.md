@@ -7,7 +7,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/abe/cache-for-laravel-sanctum.svg?style=flat-square)](https://packagist.org/packages/abe/cache-for-laravel-sanctum)
 
 Laravel Sanctum brings 3 database queries every HTTP request.
-This package wrap the default `PersonalAccessToken` model, wrapped a cache to retrieve the `token` and `tokenable`, added interval seconds for update last used time(update only if last use time longer that interval, default to 1 hour).
+This package wrap the default `PersonalAccessToken` model, use cache to retrieve the `token` and `tokenable`, added update interval for last used time(update only if current time greater than interval since last update, default to 1 hour).
 
 
 ## Installation
