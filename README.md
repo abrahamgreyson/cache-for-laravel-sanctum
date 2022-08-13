@@ -21,8 +21,6 @@ composer require abe/cache-for-laravel-sanctum
 
 Once you require this package in project, Sanctum token will retrieve through cache automatically, Redis cache is recommended.
 
-```php
-
 ## Testing
 
 ```bash
