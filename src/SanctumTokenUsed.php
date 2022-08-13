@@ -23,5 +23,7 @@ class SanctumTokenUsed
         \DB::table($this->personalAccessToken->getTable())
             ->where('id', $this->personalAccessToken->id)
             ->update($this->data);
+
+        $this->personalAccessToken->update($this->data);
     }
 }
