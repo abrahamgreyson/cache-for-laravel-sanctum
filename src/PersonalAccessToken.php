@@ -28,7 +28,7 @@ class PersonalAccessToken extends Sanctum
      * @param string $token
      * @return static|null
      */
-    public static function findToken($token): static|null
+    public static function findToken($token): ?static
     {
         $token = Cache::remember(
             "personal-access-token:$token",
@@ -97,6 +97,12 @@ class PersonalAccessToken extends Sanctum
             }
 
             return false;
+        });
+
+        static::deleting(function (self $personalAccessToken) {
+            Cache::forget("personal-access-token:{$personalAccessToken->id}");
+            Cache::forget("personal-access-token:{$personalAccessToken->id}:last_used_at");
+            Cache::forget("personal-access-token:{$personalAccessToken->id}:tokenable");
         });
     }
 }
