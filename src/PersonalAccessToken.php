@@ -31,18 +31,19 @@ class PersonalAccessToken extends Sanctum
     public static function findToken($token): ?static
     {
         $id = explode('|', $token)[0];
-        $token = Cache::remember(
+        $cachedToken = Cache::remember(
             "personal-access-token:$id",
             config('sanctum.cache.ttl') ?? self::$ttl,
             function () use ($token) {
                 return parent::findToken($token) ?? '_null_';
             }
         );
-        if ($token === '_null_') {
+
+        if ($cachedToken === '_null_' || $cachedToken->token !== $token) {
             return null;
         }
 
-        return $token;
+        return $cachedToken;
     }
 
     /**
