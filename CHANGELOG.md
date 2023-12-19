@@ -2,6 +2,12 @@
 
 All notable changes to `cache-for-laravel-sanctum` will be documented in this file.
 
+## v0.4.0 - 2023-12-19
+
+* Fixed security issue
+
+**Full Changelog**: https://github.com/abrahamgreyson/cache-for-laravel-sanctum/compare/v0.3.2...v0.4.0
+
 ## v0.3.1 - 2023-03-20
 
 ### What's Changed
