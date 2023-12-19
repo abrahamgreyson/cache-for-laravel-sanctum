@@ -4,6 +4,9 @@
     "keywords": [
         "abe",
         "laravel",
+        "token",
+        "sanctum",
+        "cache",
         "cache-for-laravel-sanctum"
     ],
     "homepage": "https://github.com/abrahamgreyson/cache-for-laravel-sanctum",
@@ -11,7 +14,7 @@
     "authors": [
         {
             "name": "abraham greyson",
-            "email": "82011220@qq.com"
+            "email": "abrahamgreyson@gmail.com"
         }
     ],
     "require": {
