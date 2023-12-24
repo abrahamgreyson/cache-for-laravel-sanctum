@@ -1,6 +1,3 @@
-这是修正后的文档：
-
-```markdown
 # Let Laravel Sanctum Use Cache to Retrieve Tokens
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/abe/cache-for-laravel-sanctum.svg?style=flat-square)](https://packagist.org/packages/abe/cache-for-laravel-sanctum)
