@@ -17,12 +17,6 @@ class PersonalAccessToken extends Sanctum
     public static int $ttl = 3600;
 
     /**
-     * The interval to refresh the last_used field in database.
-     *
-     */
-    public static int $interval = 3600;
-
-    /**
      * Find the token instance matching the given token.
      *
      * @param string $token
@@ -30,42 +24,24 @@ class PersonalAccessToken extends Sanctum
      */
     public static function findToken($token): ?static
     {
-        $id = explode('|', $token)[0];
+        [$id, $token] = !str_contains($token, '|')
+            ? [null, $token]
+            : explode('|', $token, 2);
+        $hashedToken = hash('sha256', $token);
+
         $cachedToken = Cache::remember(
-            "personal-access-token:$id",
+            "personal-access-token:$hashedToken",
             config('sanctum.cache.ttl') ?? self::$ttl,
             function () use ($token) {
                 return parent::findToken($token) ?? '_null_';
             }
         );
 
-        if ($cachedToken === '_null_' || $cachedToken->token !== $token) {
+        if ($cachedToken === '_null_' || !hash_equals($cachedToken->token, $hashedToken)) {
             return null;
         }
 
         return $cachedToken;
-    }
-
-    /**
-     * Get the tokenable model that the access token belongs to.
-     *
-     * @return Attribute
-     *
-     * help wanted: return type ain't compatible with base class
-     *
-     * @phpstan-ignore-next-line
-     */
-    public function tokenable(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value, $attributes) => Cache::remember(
-                "personal-access-token:{$attributes['id']}:tokenable",
-                config('sanctum.cache.ttl') ?? self::$ttl,
-                function () {
-                    return parent::tokenable()->first();
-                }
-            )
-        );
     }
 
     /**
@@ -80,31 +56,35 @@ class PersonalAccessToken extends Sanctum
         parent::boot();
 
         static::updating(function (self $personalAccessToken) {
-            $interval = config('sanctum.cache.update_last_used_at_interval') ?? self::$interval;
-
-            try {
-                Cache::remember(
-                    "personal-access-token:{$personalAccessToken->id}:last_used_at",
-                    $interval,
-                    function () use ($personalAccessToken) {
-                        DB::table($personalAccessToken->getTable())
-                            ->where('id', $personalAccessToken->id)
-                            ->update($personalAccessToken->getDirty());
-
-                        return now();
-                    }
-                );
-            } catch (\Exception $e) {
-                Log::critical($e->getMessage());
-            }
-
-            return false;
+            // update cache last_use_at
         });
 
         static::deleting(function (self $personalAccessToken) {
-            Cache::forget("personal-access-token:{$personalAccessToken->id}");
-            Cache::forget("personal-access-token:{$personalAccessToken->id}:last_used_at");
-            Cache::forget("personal-access-token:{$personalAccessToken->id}:tokenable");
+            Cache::forget("personal-access-token:{$personalAccessToken->token}");
+//            Cache::forget("personal-access-token:{$personalAccessToken->id}:last_used_at");
+            Cache::forget("personal-access-token:{$personalAccessToken->token}:tokenable");
         });
+    }
+
+    /**
+     * Get the tokenable model that the access token belongs to.
+     *
+     * @return Attribute
+     *
+     * help wanted: return type ain't compatible with base class
+     *
+     * @phpstan-ignore-next-line
+     */
+    public function tokenable(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value, $attributes) => Cache::remember(
+                "personal-access-token:{$attributes['token']}:tokenable",
+                config('sanctum.cache.ttl') ?? self::$ttl,
+                function () {
+                    return parent::tokenable()->first();
+                }
+            )
+        );
     }
 }
