@@ -3,10 +3,8 @@
 namespace CacheForLaravelSanctum;
 
 use Cache;
-use DB;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Laravel\Sanctum\PersonalAccessToken as Sanctum;
-use Log;
 
 class PersonalAccessToken extends Sanctum
 {
@@ -24,7 +22,7 @@ class PersonalAccessToken extends Sanctum
      */
     public static function findToken($token): ?static
     {
-        [$id, $token] = !str_contains($token, '|')
+        [$id, $token] = ! str_contains($token, '|')
             ? [null, $token]
             : explode('|', $token, 2);
         $hashedToken = hash('sha256', $token);
@@ -37,7 +35,7 @@ class PersonalAccessToken extends Sanctum
             }
         );
 
-        if ($cachedToken === '_null_' || !hash_equals($cachedToken->token, $hashedToken)) {
+        if ($cachedToken === '_null_' || ! hash_equals($cachedToken->token, $hashedToken)) {
             return null;
         }
 
@@ -61,7 +59,7 @@ class PersonalAccessToken extends Sanctum
 
         static::deleting(function (self $personalAccessToken) {
             Cache::forget("personal-access-token:{$personalAccessToken->token}");
-//            Cache::forget("personal-access-token:{$personalAccessToken->id}:last_used_at");
+            //            Cache::forget("personal-access-token:{$personalAccessToken->id}:last_used_at");
             Cache::forget("personal-access-token:{$personalAccessToken->token}:tokenable");
         });
     }
@@ -78,7 +76,7 @@ class PersonalAccessToken extends Sanctum
     public function tokenable(): Attribute
     {
         return Attribute::make(
-            get: fn($value, $attributes) => Cache::remember(
+            get: fn ($value, $attributes) => Cache::remember(
                 "personal-access-token:{$attributes['token']}:tokenable",
                 config('sanctum.cache.ttl') ?? self::$ttl,
                 function () {
